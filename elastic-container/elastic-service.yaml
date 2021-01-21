@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: elastic
+spec:
+  selector:
+    name: elastic
+  type: ClusterIP
+  ports:
+  - port: 9200
+    targetPort: 9200
+    name: port1
+  - port: 9300
+    targetPort: 9300
+    name: port2

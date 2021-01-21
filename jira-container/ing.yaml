@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/affinity: "cookie"
+    ingress.kubernetes.io/affinity-mode: "persistent"
+    ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/session-cookie-expires: "172800"
+    ingress.kubernetes.io/session-cookie-max-age: "172800"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
+  name: jira-ingress
+  namespace: jira-stack
+spec:
+  tls:
+  - hosts:
+    - icptubs01.tihibrida.interneth.bradesco.com.br
+    secretName: tls
+  rules:
+  - host: icptubs01.tihibrida.interneth.bradesco.com.br
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jira
+          servicePort: 8080

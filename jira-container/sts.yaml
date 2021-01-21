@@ -1,0 +1,90 @@
+apiVersion: apps/v1 
+kind: StatefulSet 
+metadata:
+  name: jira
+  namespace: jira-stack
+spec:
+  selector:
+    matchLabels:
+      app: jira
+  serviceName: jira
+  replicas: 2
+  template:
+    metadata:
+      name: jira
+      labels:
+        app: jira
+    spec:
+      containers:
+      - name: jira
+        image: atlassian/jira-software:8.5.4-jdk8 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: jira
+          containerPort: 40001
+          name: jiraclusterport
+        env:
+        - name: JVM_MINIMUM_MEMORY
+          value: "4096m"
+        - name: JVM_MAXIMUM_MEMORY
+          value: "4096m"
+        - name: ATL_PROXY_NAME
+          value:  icptubs01.tihibrida.interneth.bradesco.com.br
+        - name: ATL_PROXY_PORT
+          value: "443"
+        - name: ATL_TOMCAT_SCHEME
+          value: "https"
+         #      TIMEOUT
+        - name: ATL_TOMCAT_CONNECTIONTIMEOUT
+          value: "600000"
+        - name: ATL_TOMCAT_SECURE
+          value: "true"
+        - name: CATALINA_CONNECTOR_PROXYNAME
+          value: icptubs01.tihibrida.interneth.bradesco.com.br
+        - name: CATALINA_CONNECTOR_SCHEME
+          value: "https"
+        - name: CATALINA_CONNECTOR_SECURE
+          value: "true"
+         #       DATABASE
+        - name: ATL_JDBC_URL
+          value: jdbc:postgresql://postgresql-db.bseg-devops:5432/jira
+        - name: ATL_JDBC_USER
+          value: usr_jira
+        - name: ATL_JDBC_PASSWORD
+          value: jiratu1
+        - name: ATL_DB_DRIVER
+          value: org.postgresql.Driver
+        - name: ATL_DB_TYPE
+          value: postgres72
+        #        CONFIG
+        - name: CLUSTERED
+          value: "true"
+        - name: EHCACHE_LISTENER_PORT
+          value: "40001"
+        - name: JIRA_SHARED_HOME
+          value: "/var/atlassian/shared"
+        - name: NODE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: JIRA_NODE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: EHCACHE_LISTENER_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - name: home
+          mountPath: "/var/atlassian/application-data/jira"
+        - name: jira-shared
+          mountPath: "/var/atlassian/shared"
+      volumes:
+      - name: home
+        emptyDir:
+          {}
+      - name: jira-shared
+        persistentVolumeClaim:
+          claimName: pv-claim-jira-shared
