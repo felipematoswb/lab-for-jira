@@ -15,8 +15,8 @@ spec:
     kind: PersistentVolumeClaim
     name: pv-claim-jira-shared
     namespace: jira-stack
-  local:
-    path: /mnt
+  hostPath:
+    path: /mnt/jira
   storageClassName: jira-shared
 ---
 apiVersion: v1

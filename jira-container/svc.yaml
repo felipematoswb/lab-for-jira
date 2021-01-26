@@ -13,5 +13,5 @@ spec:
     targetPort: 8080
   selector:
     app: jira
-  type: ClusterIP
+  type: NodePort #ClusterIP
   sessionAffinity: ClientIP

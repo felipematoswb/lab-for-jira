@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: jira
   serviceName: jira
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       name: jira
@@ -26,11 +26,11 @@ spec:
           name: jiraclusterport
         env:
         - name: JVM_MINIMUM_MEMORY
-          value: "4096m"
+          value: "2048m"
         - name: JVM_MAXIMUM_MEMORY
-          value: "4096m"
+          value: "2048m"
         - name: ATL_PROXY_NAME
-          value:  icptubs01.tihibrida.interneth.bradesco.com.br
+          value:  hello-world-jira.com.br
         - name: ATL_PROXY_PORT
           value: "443"
         - name: ATL_TOMCAT_SCHEME
@@ -41,18 +41,18 @@ spec:
         - name: ATL_TOMCAT_SECURE
           value: "true"
         - name: CATALINA_CONNECTOR_PROXYNAME
-          value: icptubs01.tihibrida.interneth.bradesco.com.br
+          value: hello-world-jira.com.br
         - name: CATALINA_CONNECTOR_SCHEME
           value: "https"
         - name: CATALINA_CONNECTOR_SECURE
           value: "true"
          #       DATABASE
         - name: ATL_JDBC_URL
-          value: jdbc:postgresql://postgresql-db.bseg-devops:5432/jira
+          value: jdbc:postgresql://postgres.jira-stack:5432/jiradb
         - name: ATL_JDBC_USER
-          value: usr_jira
+          value: user_jira
         - name: ATL_JDBC_PASSWORD
-          value: jiratu1
+          value: pass_jira
         - name: ATL_DB_DRIVER
           value: org.postgresql.Driver
         - name: ATL_DB_TYPE

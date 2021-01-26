@@ -4,6 +4,7 @@ metadata:
   labels:
     app: kibana
   name: kibana
+  namespace: elastic-stack
 spec:
   replicas: 1
   selector:
@@ -21,4 +22,4 @@ spec:
         - containerPort: 5601
         env:
         - name: ELASTICSEARCH_URL
-          value: http://elasticsearch:9200
+          value: http://elastic.elastic-stack.svc.cluster.local:9200
